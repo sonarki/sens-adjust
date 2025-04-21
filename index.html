@@ -497,7 +497,7 @@
     }
 
     function handleFiles(files) {
-      const newFiles = Array.from(files).filter(file => !fileArray.some(f => f.name === file.name && f.size === file.size));
+      const newFiles = Array.from(files).filter(file => !fileArray.some(f => f.name === file.name && f.size === f.size));
       fileArray = [...fileArray, ...newFiles].slice(0, 5);
       const dt = new DataTransfer();
       fileArray.forEach(f => dt.items.add(f));
@@ -548,10 +548,10 @@
 
       try {
         const dpi = Number(dpiInput.value) || 800;
-        const demoY = Array.from({ length: 20 }, () => (Math.random() - 0.5) * 20); // 수직 편차 ±10
+        const demoY = Array.from({ length: 20 }, () => (Math.random() - 0.5) * 20);
         const absY = demoY.map(Math.abs);
         const meanY = absY.reduce((a,b)=>a+b)/absY.length || 5;
-        const demoX = Array.from({ length: 20 }, () => (Math.random() - 0.5) * 14); // 수평 편차 ±7
+        const demoX = Array.from({ length: 20 }, () => (Math.random() - 0.5) * 14);
         const absX = demoX.map(Math.abs);
         const meanX = absX.reduce((a,b)=>a+b)/absX.length || 5;
 
