@@ -36,12 +36,27 @@
       box-shadow: var(--shadow);
       padding: 0 1rem;
     }
-    .container {
-      max-width: 800px;
+    .main-container {
+      max-width: 1200px;
       margin: var(--spacing) auto;
-      padding: var(--spacing);
+      display: flex;
+      gap: 2rem;
+      padding: 0 var(--spacing);
+    }
+    .input-container {
+      flex: 1;
+      max-width: 600px;
       background: var(--card-bg);
       border-radius: var(--border-radius);
+      padding: var(--spacing);
+      box-shadow: var(--shadow);
+    }
+    .explanation-container {
+      flex: 1;
+      max-width: 500px;
+      background: #E6F0FA;
+      border-radius: var(--border-radius);
+      padding: var(--spacing);
       box-shadow: var(--shadow);
     }
     h1 { display: none; }
@@ -51,6 +66,9 @@
       margin-bottom: var(--spacing);
       color: var(--text-color);
       font-weight: 600;
+    }
+    .explanation-container h2 {
+      font-size: 1.3rem;
     }
     .form-group { margin-bottom: var(--spacing); }
     label {
@@ -133,8 +151,9 @@
       width: 20px;
       height: 20px;
       font-size: 12px;
-      line-height: 20px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       transition: background 0.2s;
     }
@@ -152,7 +171,7 @@
       border: none;
       border-radius: var(--border-radius);
       cursor: pointer;
-      transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
     }
     button:disabled {
       background: #D1D5DB;
@@ -169,9 +188,10 @@
       gap: 1rem;
     }
     .form-group-inline small {
-      margin-top: 0.25rem;
+      max-width: 400px;
       color: var(--subtext-color);
       font-size: 0.9rem;
+      line-height: 1.4;
     }
     .box {
       background: #F9FAFB;
@@ -189,6 +209,13 @@
       font-size: 1rem;
       color: var(--text-color);
     }
+    .result-explanation {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: var(--subtext-color);
+      border-top: 1px solid #D1D5DB;
+      padding-top: 1rem;
+    }
     .copy-btn {
       display: inline-block;
       margin-top: 1rem;
@@ -203,6 +230,16 @@
     }
     .copy-btn:hover {
       background: #003F6B;
+    }
+    .copy-fallback {
+      margin-top: 1rem;
+      display: none;
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      background: #F9FAFB;
+      border: 1px solid #D1D5DB;
+      border-radius: var(--border-radius);
     }
     .link-back {
       display: flex;
@@ -259,7 +296,7 @@
       line-height: 1;
     }
     .side-note {
-      max-width: 800px;
+      max-width: 600px;
       margin: 2rem auto;
       padding: 1.75rem;
       background: #E6F0FA;
@@ -268,6 +305,14 @@
       font-size: 0.95rem;
       color: var(--text-color);
       box-shadow: var(--shadow);
+    }
+    @media (max-width: 900px) {
+      .main-container {
+        flex-direction: column;
+      }
+      .input-container, .explanation-container {
+        max-width: 100%;
+      }
     }
     @media (max-width: 600px) {
       .site-header {
@@ -284,6 +329,13 @@
         font-size: 1.2rem;
         padding: 0.15rem 0.3rem;
       }
+      .form-group-inline {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .form-group-inline small {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
@@ -294,63 +346,89 @@
       <div class="sub-heading">막창샷들 드루와, 레이저로 가즈아!</div>
     </div>
   </header>
-  <div class="container">
-    <h1>소낙의 감도 조정사</h1>
-    <h2>기본 감도 설정</h2>
-    <div class="form-group">
-      <label for="dpi-input">현재 DPI</label>
-      <select id="dpi-input">
-        <option>400</option><option>800</option><option>1200</option><option>1800</option><option>3200</option>
-      </select>
-    </div>
-    <div class="form-group form-group-inline">
-      <div style="flex:1;">
-        <label for="general-sens-input">일반 감도</label>
-        <input type="number" id="general-sens-input" value="50" min="0" step="0.1">
+  <div class="main-container">
+    <div class="input-container">
+      <h1>소낙의 감도 조정사</h1>
+      <h2>사용자 감도 설정</h2>
+      <div class="form-group">
+        <label for="dpi-input">현재 DPI</label>
+        <select id="dpi-input">
+          <option>400</option><option>800</option><option>1200</option><option>1800</option><option>3200</option>
+        </select>
       </div>
-      <div style="flex:1;">
-        <label for="vertical-sens-input">수직 감도</label>
-        <input type="number" id="vertical-sens-input" value="1" min="0" step="0.1">
+      <div class="form-group form-group-inline">
+        <div style="flex:1;">
+          <label for="general-sens-input">일반 감도</label>
+          <input type="number" id="general-sens-input" value="50" min="0" step="0.1">
+        </div>
+        <div style="flex:1;">
+          <label for="vertical-sens-input">수직 감도</label>
+          <input type="number" id="vertical-sens-input" value="1" min="0" step="0.1">
+        </div>
+      </div>
+      <div class="form-group form-group-inline">
+        <div style="flex:1;">
+          <label for="aim-sens-input">조준 감도</label>
+          <input type="number" id="aim-sens-input" value="50" min="0" step="0.1">
+        </div>
+        <div style="flex:1;">
+          <label for="scope-sens-input">스코프 모드 감도</label>
+          <input type="number" id="scope-sens-input" value="50" min="0" step="0.1">
+        </div>
+      </div>
+
+      <h2>게임 영상 업로드</h2>
+      <div id="file-drop-zone" class="file-drop">
+        <span class="plus-icon">+</span>
+        <div id="preview-container"></div>
+        <p id="file-list">최대 5개 영상 업로드 가능</p>
+      </div>
+      <input type="file" id="video-input" accept="video/*" multiple hidden>
+
+      <button id="analyze-btn" disabled>분석 시작</button>
+
+      <div class="form-group-inline">
+        <label><input type="checkbox" id="unlock-ratio"> 제한 해제</label>
+        <small id="ratio-status">기본 설정: 감도를 ±10% 내로 조정합니다. 제한 해제 시 영상 분석 결과에 따라 최대 ±20%까지 조정됩니다.</small>
+      </div>
+
+      <div id="analysis-result" class="box" style="display:none;"></div>
+      <textarea id="copy-fallback" class="copy-fallback" readonly style="display:none;"></textarea>
+      <div id="charts" class="chart-container" style="display:none;">
+        <canvas id="spray-scatter"></canvas>
+        <canvas id="recoil-chart"></canvas>
+      </div>
+
+      <aside class="side-note">
+        <p>감도 보정은 한 번의 계산으로 끝나는 것이 아닙니다. 다양한 상황의 영상을 업로드하고, 실제 보정값으로 플레이하며 자신의 손에 맞는 감도를 찾아가는 반복 과정이 중요합니다. 소낙의 감도 보정사는 레이저 샷을 원하는 분들 중, 감도 설정이 잘못되었거나 본인에게 맞지 않는 분들에게 영상 기반의 분석을 통해 보정 방향을 제시해주는 조력자입니다. <strong>제한 해제</strong>는 영상 분석 결과에 따라 감도를 최대 ±20%까지 자유롭게 조정합니다.</p>
+      </aside>
+
+      <div class="link-back">
+        <a href="https://sonak-sens-master.vercel.app/">감도계산이 궁금쓰? > 소낙의 감도사로 ㄱㄱ!</a>
       </div>
     </div>
-    <div class="form-group form-group-inline">
-      <div style="flex:1;">
-        <label for="aim-sens-input">조준 감도</label>
-        <input type="number" id="aim-sens-input" value="50" min="0" step="0.1">
-      </div>
-      <div style="flex:1;">
-        <label for="scope-sens-input">스코프 모드 감도</label>
-        <input type="number" id="scope-sens-input" value="50" min="0" step="0.1">
-      </div>
-    </div>
+    <div class="explanation-container">
+      <h2>감도 계산 공식</h2>
+      <p>PUBG의 감도는 마우스 이동 거리(D, cm), DPI, 게임 내 감도(S) 간 물리적 관계를 기반으로 계산됩니다. 화면 회전 각도(θ)는 다음 공식으로 표현됩니다:</p>
+      <p style="text-align:center;">θ = (D × DPI × S) / (360 × FOV)</p>
+      <p>여기서 FOV는 시야각(기본 103도)입니다. 이 공식은 마우스 이동이 게임 내 회전을 얼마나 빠르게 만드는지를 나타냅니다.</p>
+      <p>감도 보정은 영상에서 추출한 리코일 편차(ΔX: 수평, ΔY: 수직)를 분석하여 최적의 감도를 계산합니다. 비율(ratio)은 다음과 같이 계산됩니다:</p>
+      <p style="text-align:center;">ratio<sub>X</sub> = 1 - [(mean(|ΔX|) - 5) / 5] × 0.15 × (800 / DPI)</p>
+      <p style="text-align:center;">ratio<sub>Y</sub> = 1 - [(mean(|ΔY|) - 5) / 5] × 0.15 × (800 / DPI)</p>
+      <p style="text-align:center;">ratio = (ratio<sub>X</sub> + ratio<sub>Y</sub>) / 2</p>
+      <p>mean(|ΔX|), mean(|ΔY|)는 리코일 편차의 절대값 평균이며, 목표 편차는 5픽셀입니다. DPI가 높을수록 조정 폭이 줄어듭니다.</p>
 
-    <h2>게임 영상 업로드</h2>
-    <div id="file-drop-zone" class="file-drop">
-      <span class="plus-icon">+</span>
-      <div id="preview-container"></div>
-      <p id="file-list">최대 5개 영상 업로드 가능</p>
-    </div>
-    <input type="file" id="video-input" accept="video/*" multiple hidden>
-
-    <button id="analyze-btn" disabled>분석 시작</button>
-
-    <div class="form-group form-group-inline">
-      <label><input type="checkbox" id="unlock-ratio"> 제한 해제</label>
-      <small id="ratio-status">기본 비율 0.8~1.2 적용 중</small>
-    </div>
-
-    <div id="analysis-result" class="box" style="display:none;"></div>
-    <div id="charts" class="chart-container" style="display:none;">
-      <canvas id="spray-scatter"></canvas>
-      <canvas id="recoil-chart"></canvas>
-    </div>
-
-    <aside class="side-note">
-      <p>감도 보정은 한 번의 계산으로 끝나는 것이 아닙니다. 다양한 상황의 영상을 업로드하고, 실제 보정값으로 플레이하며 자신의 손에 맞는 감도를 찾아가는 반복 과정이 중요합니다. 소낙의 감도 보정사는 레이저 샷을 원하는 분들 중, 감도 설정이 잘못되었거나 본인에게 맞지 않는 분들에게 영상 기반의 분석을 통해 보정 방향을 제시해주는 조력자입니다.</p>
-    </aside>
-
-    <div class="link-back">
-      <a href="https://sonak-sens-master.vercel.app/">감도계산이 궁금쓰? > 소낙의 감도사로 ㄱㄱ!</a>
+      <h2>영상 분석 및 결과 추출</h2>
+      <p>영상 분석은 업로드된 게임 플레이 영상에서 마우스 이동 궤적과 리코일 패턴을 추출합니다. 현재는 PUBG의 AKM, M416 같은 무기의 리코일 패턴을 모방한 데모 데이터(수평 편차 ±7픽셀, 수직 편차 ±10픽셀)를 사용합니다.</p>
+      <p><strong>분석 과정:</strong></p>
+      <ul>
+        <li>1. 영상에서 프레임별 마우스 이동(ΔX, ΔY)을 추적.</li>
+        <li>2. 리코일 편차의 절대값 평균(mean(|ΔX|), mean(|ΔY|)) 계산.</li>
+        <li>3. 목표 편차(5픽셀)와 비교해 비율(ratio) 계산.</li>
+        <li>4. 기본 설정(±10%) 또는 제한 해제(±20%) 적용.</li>
+        <li>5. 입력 감도에 ratio를 곱해 새로운 감도 출력.</li>
+      </ul>
+      <p>미래에는 OpenCV.js 또는 서버 측 분석을 통해 실제 영상에서 마우스 이동과 리코일 패턴을 정밀 분석할 계획입니다.</p>
     </div>
   </div>
 
@@ -362,6 +440,7 @@
     const previewContainer = document.getElementById('preview-container');
     const analyzeBtn = document.getElementById('analyze-btn');
     const resultDiv = document.getElementById('analysis-result');
+    const copyFallback = document.getElementById('copy-fallback');
     const chartsDiv = document.getElementById('charts');
     const generalInput = document.getElementById('general-sens-input');
     const verticalInput = document.getElementById('vertical-sens-input');
@@ -369,6 +448,7 @@
     const scopeInput = document.getElementById('scope-sens-input');
     const unlockRatio = document.getElementById('unlock-ratio');
     const ratioStatus = document.getElementById('ratio-status');
+    const dpiInput = document.getElementById('dpi-input');
 
     let fileArray = [];
     let cachedResult = null;
@@ -439,9 +519,10 @@
       recoilChart = null;
       resultDiv.style.display = 'none';
       chartsDiv.style.display = 'none';
+      copyFallback.style.display = 'none';
     }
 
-    [generalInput, verticalInput, aimInput, scopeInput].forEach(input => {
+    [generalInput, verticalInput, aimInput, scopeInput, dpiInput].forEach(input => {
       input.addEventListener('input', () => {
         resetCache();
         updateButton();
@@ -450,7 +531,9 @@
 
     unlockRatio.addEventListener('change', () => {
       resetCache();
-      ratioStatus.textContent = unlockRatio.checked ? '제한 해제: 원 비율 적용' : '기본 비율 0.8~1.2 적용 중';
+      ratioStatus.textContent = unlockRatio.checked
+        ? '제한 해제: 영상 분석 결과에 따라 감도를 최대 ±20%까지 조정합니다.'
+        : '기본 설정: 감도를 ±10% 내로 조정합니다.';
       updateButton();
     });
 
@@ -459,27 +542,47 @@
         resultDiv.style.display = 'block';
         resultDiv.innerHTML = cachedResult;
         chartsDiv.style.display = 'block';
+        copyFallback.style.display = 'none';
         return;
       }
 
       try {
-        const demoY = Array.from({ length: 20 }, (_, i) => (Math.sin(i * 0.5) - 0.5) * 10);
+        const dpi = Number(dpiInput.value) || 800;
+        const demoY = Array.from({ length: 20 }, () => (Math.random() - 0.5) * 20);
         const absY = demoY.map(Math.abs);
-        const meanY = absY.reduce((a,b)=>a+b)/absY.length;
-        const demoX = Array.from({ length: 20 }, (_, i) => (Math.cos(i * 0.5) - 0.5) * 10);
+        const meanY = absY.reduce((a,b)=>a+b)/absY.length || 5;
+        const demoX = Array.from({ length: 20 }, () => (Math.random() - 0.5) * 14);
         const absX = demoX.map(Math.abs);
-        const meanX = absX.reduce((a,b)=>a+b)/absX.length;
-        let ratio = ((2/meanX)+(2/meanY))/2;
-        console.log('Calculated ratio:', ratio, 'Unlock checked:', unlockRatio.checked);
+        const meanX = absX.reduce((a,b)=>a+b)/absX.length || 5;
+
+        const ratioX = 1 - ((meanX - 5) / 5) * 0.15 * (800 / dpi);
+        const ratioY = 1 - ((meanY - 5) / 5) * 0.15 * (800 / dpi);
+        let ratio = (ratioX + ratioY) / 2;
+        console.log('MeanX:', meanX, 'MeanY:', meanY, 'RatioX:', ratioX, 'RatioY:', ratioY, 'Raw ratio:', ratio);
+
         if (!unlockRatio.checked) {
+          ratio = Math.max(0.9, Math.min(1.1, ratio));
+        } else {
           ratio = Math.max(0.8, Math.min(1.2, ratio));
         }
-        console.log('Final ratio:', ratio);
+        console.log('Final ratio:', ratio, 'Unlock checked:', unlockRatio.checked);
 
         const rec = v => {
           const result = (v * ratio).toFixed(2);
           return isNaN(result) ? '0.00' : result;
         };
+
+        const deltaPercent = ((ratio - 1) * 100).toFixed(1);
+        let explanation = '';
+        if (meanX > 6 && meanY > 7) {
+          explanation = `영상 분석 결과, 수평 리코일(${meanX.toFixed(1)}픽셀)과 수직 리코일(${meanY.toFixed(1)}픽셀)이 목표(5픽셀)보다 큽니다. 따라서 일반/조준 감도를 ${Math.abs(deltaPercent)}% 낮추고, 수직 감도를 ${Math.abs(deltaPercent)}% 낮춰 리코일 제어를 강화했습니다.`;
+        } else if (meanX > 6) {
+          explanation = `영상 분석 결과, 수평 리코일(${meanX.toFixed(1)}픽셀)이 목표(5픽셀)보다 큽니다. 따라서 일반/조준 감도를 ${Math.abs(deltaPercent)}% 낮췄습니다. 수직 리코일(${meanY.toFixed(1)}픽셀)은 적절해 수직 감도는 미세 조정했습니다.`;
+        } else if (meanY > 7) {
+          explanation = `영상 분석 결과, 수직 리코일(${meanY.toFixed(1)}픽셀)이 목표(5픽셀)보다 큽니다. 따라서 수직 감도를 ${Math.abs(deltaPercent)}% 낮췄습니다. 수평 리코일(${meanX.toFixed(1)}픽셀)은 적절해 일반/조준 감도는 미세 조정했습니다.`;
+        } else {
+          explanation = `영상 분석 결과, 수평 리코일(${meanX.toFixed(1)}픽셀)과 수직 리코일(${meanY.toFixed(1)}픽셀)이 목표(5픽셀)에 가깝습니다. 정밀도를 높이기 위해 모든 감도를 ${Math.abs(deltaPercent)}% ${deltaPercent > 0 ? '높였습니다' : '낮췄습니다'}.`;
+        }
 
         const resultHTML = `
           <strong>추천 감도</strong><br>
@@ -487,12 +590,15 @@
           - 수직: ${rec(+verticalInput.value)}<br>
           - 조준: ${rec(+aimInput.value)}<br>
           - 스코프: ${rec(+scopeInput.value)}<br>
+          <div class="result-explanation">${explanation}</div>
           <div class="copy-btn" onclick="copyResults()">결과 복사</div>
         `;
         cachedResult = resultHTML;
         resultDiv.style.display = 'block';
         resultDiv.innerHTML = resultHTML;
+        copyFallback.value = `일반: ${rec(+generalInput.value)}\n수직: ${rec(+verticalInput.value)}\n조준: ${rec(+aimInput.value)}\n스코프: ${rec(+scopeInput.value)}`;
         chartsDiv.style.display = 'block';
+        copyFallback.style.display = 'none';
 
         if (sprayChart) sprayChart.destroy();
         if (recoilChart) recoilChart.destroy();
@@ -503,8 +609,8 @@
             datasets: [{
               label: '스프레이',
               data: Array.from({length: 50}, () => ({
-                x: (Math.cos(Math.random() * Math.PI) - 0.5) * 20,
-                y: (Math.sin(Math.random() * Math.PI) - 0.5) * 20
+                x: (Math.random() - 0.5) * 14,
+                y: (Math.random() - 0.5) * 20
               })),
               backgroundColor: 'rgba(0, 163, 224, 0.6)'
             }]
@@ -512,8 +618,8 @@
           options: {
             plugins: { title: { display: true, text: '스프레이 패턴' } },
             scales: {
-              x: { title: { display: true, text: '수평 편차' } },
-              y: { title: { display: true, text: '수직 편차' } }
+              x: { title: { display: true, text: '수평 편차 (픽셀)' } },
+              y: { title: { display: true, text: '수직 편차 (픽셀)' } }
             }
           }
         });
@@ -531,7 +637,7 @@
             plugins: { title: { display: true, text: '리코일 분석' } },
             scales: {
               x: { title: { display: true, text: '프레임' } },
-              y: { title: { display: true, text: '편차 크기' } }
+              y: { title: { display: true, text: '편차 크기 (픽셀)' } }
             }
           }
         });
@@ -550,6 +656,7 @@
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(text).then(() => {
           alert('결과가 클립보드에 복사되었습니다!');
+          copyFallback.style.display = 'none';
         }).catch(err => {
           console.error('클립보드 복사 실패:', err);
           fallbackCopy(text);
@@ -560,21 +667,18 @@
     }
 
     function fallbackCopy(text) {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      document.body.appendChild(textarea);
-      textarea.focus();
-      textarea.select();
+      copyFallback.style.display = 'block';
+      copyFallback.value = text;
+      copyFallback.focus();
+      copyFallback.select();
       try {
         document.execCommand('copy');
         alert('결과가 클립보드에 복사되었습니다!');
+        copyFallback.style.display = 'none';
       } catch (err) {
         console.error('대체 복사 실패:', err);
-        alert('복사에 실패했습니다. HTTPS 환경에서 테스트하거나 수동으로 복사해주세요.');
+        alert('클립보드 복사가 실패했습니다. 아래 텍스트를 수동으로 복사해주세요.');
       }
-      document.body.removeChild(textarea);
     }
   </script>
 </body>
